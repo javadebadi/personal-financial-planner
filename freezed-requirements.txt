@@ -1,0 +1,5 @@
+charset-normalizer==2.1.0
+idna==3.3
+lxml==4.9.0
+python-docx==0.8.11
+urllib3==1.26.10
