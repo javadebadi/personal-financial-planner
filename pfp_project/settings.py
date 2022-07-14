@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     # 3rd party apps
     'rest_framework',
     'social_django',
+    # our apps
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -151,3 +153,5 @@ AUTHENTICATION_BACKENDS = (
 # google oauth2 credential (client_id and client_secret)
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '1000019869057-gapkku7d4lcgqpb6hku4nq8lir7i0gpv.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/admin/'
