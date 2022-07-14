@@ -8,8 +8,8 @@
     <title>Login</title>
 <link rel="stylesheet" href="{% static 'accounts/css/nicepage.css' %}" media="screen">
     <link rel="stylesheet" href="{% static 'accounts/css/login.css' %}" media="screen">
-    <script class="u-script" type="text/javascript" src="jquery.js" defer=""></script>
-    <script class="u-script" type="text/javascript" src="nicepage.js" defer=""></script>
+    <script class="u-script" type="text/javascript" src="{% static 'accounts/js/jquery.js' %}" defer=""></script>
+    <script class="u-script" type="text/javascript" src="{% static 'accounts/js/nicepage.js' %}" defer=""></script>
     <meta name="generator" content="Nicepage 4.13.4, nicepage.com">
     <link id="u-theme-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i|Open+Sans:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i">
     <link id="u-page-google-font" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i">
@@ -68,7 +68,7 @@
             <div class="u-align-center u-black u-container-style u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
               <div class="u-inner-container-layout u-sidenav-overflow">
                 <div class="u-menu-close"></div>
-                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="Login.html">Login</a>
+                <ul class="u-align-center u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href={% url 'accounts_login' %}>Login</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="Home.html">Home</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="Copy-of-Copy-of-Home-3.html">Copy of Copy of Home 3</a>
 </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="Copy-of-Home.html">Copy of Home</a>
@@ -87,7 +87,9 @@
         <div class="u-align-center u-border-11 u-border-no-left u-border-no-right u-border-no-top u-border-palette-2-base u-container-style u-custom-border u-expanded-width-xs u-grey-15 u-group u-shape-rectangle u-group-1">
           <div class="u-container-layout u-container-layout-1">
             <div class="u-form u-login-control u-form-1">
-              <form action="#" method="POST" class="u-clearfix u-form-custom-backend u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 0px;">
+
+              <form action="{% url 'accounts_login' %}" method="POST" class="u-clearfix u-form-custom-backend u-form-spacing-10 u-form-vertical u-inner-form" source="custom" name="form" style="padding: 0px;">
+                 {% csrf_token %}
                 <div class="u-form-group u-form-name u-label-top">
                   <label for="username-a30d" class="u-label u-label-1">Username *</label>
                   <input type="text" placeholder="Enter your Username" id="username-a30d" name="username" class="u-border-8 u-border-white u-input u-input-rectangle u-radius-50 u-white u-input-1" required="">
@@ -102,7 +104,7 @@
                 </div>
                 <div class="u-align-left u-form-group u-form-submit u-label-top">
                   <input type="submit" value="submit" class="u-form-control-hidden">
-                  <a href="#" class="u-active-white u-border-none u-btn u-btn-round u-btn-submit u-button-style u-hover-white u-palette-2-base u-radius-50 u-text-active-palette-2-base u-text-hover-palette-2-base u-btn-1">Login</a>
+                  <a href="{% url 'accounts_login' %}" class="u-active-white u-border-none u-btn u-btn-round u-btn-submit u-button-style u-hover-white u-palette-2-base u-radius-50 u-text-active-palette-2-base u-text-hover-palette-2-base u-btn-1">Login</a>
                 </div>
                 <input type="hidden" value="" name="recaptchaResponse">
               </form>
@@ -112,6 +114,17 @@
               <div class="u-container-layout u-container-layout-2">
                 <a href="https://nicepage.com/c/architecture-building-website-templates" class="u-border-1 u-border-active-palette-2-light-2 u-border-hover-palette-2-light-2 u-btn u-button-style u-login-control u-login-create-account u-none u-text-active-palette-2-light-2 u-text-hover-palette-2-light-2 u-text-palette-2-base u-btn-3">Forgot password?</a>
                 <a href="https://nicepage.com/c/pricing-html-templates" class="u-border-1 u-border-active-palette-2-light-2 u-border-hover-palette-2-light-2 u-btn u-button-style u-login-control u-login-create-account u-none u-text-active-palette-2-light-2 u-text-hover-palette-2-light-2 u-text-palette-2-base u-btn-4">Don't have an account?</a>
+              </div>
+            </div>
+            {% comment %} message for invalid user login {% endcomment %}
+              <div class="u-container-layout u-container-layout-2">
+                {% if messages %}
+                    {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                    <p style="color:red; font-weight:bold;">{{ message }}</p>
+                    {% endif %}
+                    {% endfor %}
+                {% endif %}
               </div>
             </div>
           </div>
