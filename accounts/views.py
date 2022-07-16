@@ -1,10 +1,15 @@
 from django.views import View
 from django.conf import settings
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.shortcuts import (
+    render,
+    redirect,
+    )
+from django.contrib.auth import (
+    authenticate,
+    login,
+    logout,
+    )
 from django.contrib import messages
-
-from django.contrib.messages import get_messages
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -34,4 +39,14 @@ class LoginView(View):
             messages.error(request, 'Username or password is wrong!')
             return render(request, 'accounts/login.html')
 
+
+class LogoutView(View):
+
+    def post(self, request):
+        logout(request)
+        return redirect('accounts_login')
+
+    def get(self, request):
+        logout(request)
+        return redirect('accounts_login')
 
