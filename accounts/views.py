@@ -12,6 +12,10 @@ from django.contrib.auth import (
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.contrib.auth import get_user_model
+from django.db.utils import IntegrityError
+
+User = get_user_model()
 
 
 class LoginView(View):
@@ -50,3 +54,31 @@ class LogoutView(View):
         logout(request)
         return redirect('accounts_login')
 
+
+class SignupView(View):
+
+    def post(self, request):
+        try:
+            username = request.POST['username']
+            email = request.POST.get('email')
+            password = request.POST['password']
+            user = User.objects.create_user(
+                username,
+                email,
+                password,
+                )
+            login(
+                request,
+                user,
+                backend='django.contrib.auth.backends.ModelBackend',
+                )
+            return redirect(settings.SOCIAL_AUTH_LOGIN_REDIRECT_URL)
+        except IntegrityError as e:
+            raise NotImplementedError("Signup of exising user is not implemented")
+
+
+    def get(self, request):
+        if request.user.is_anonymous:
+            return render(request, 'accounts/signup.html', {})
+        else:
+            return redirect(settings.SOCIAL_AUTH_LOGIN_REDIRECT_URL)
