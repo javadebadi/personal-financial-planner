@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
+    path('pfp/', include('pfp.urls')),
     # url for the accounts (user service) app
     path('accounts/', include('accounts.urls')),
     # urls of social authentication

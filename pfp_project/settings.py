@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'social_django',
     # our apps
     'accounts',
+    'pfp',
 ]
 
 MIDDLEWARE = [
