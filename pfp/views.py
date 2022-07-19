@@ -9,4 +9,7 @@ class DashboardView(PermissionRequiredMixin, View):
         )
 
     def get(self, request):
-        return HttpResponse("<h1>Hello Personal Financial Planner</h1>")
+        context = {
+            'title': 'dashboard',
+        }
+        return render(request, 'pfp/base.html', context=context)
