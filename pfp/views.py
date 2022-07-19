@@ -9,7 +9,9 @@ class DashboardView(PermissionRequiredMixin, View):
         )
 
     def get(self, request):
+        user = request.user
         context = {
             'title': 'dashboard',
         }
+        print(context)
         return render(request, 'pfp/base.html', context=context)
