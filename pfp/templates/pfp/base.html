@@ -84,13 +84,11 @@
 
     <div class="container-fluid bg-primary" style="height: 94.8vh;">
         <div class="row h-100">
+            <!-- sidebar section -->
             <section class="col-xl-2 col-lg-2 d-none d-lg-block bg-dark text-white">
-                <div class="row h-100">
-                    <ul>
-                        <li>Account 1</li>
-                    </ul>
-                </div>
+                {% include 'pfp/components/liquidity_sidebar/liquidity_sidebar.html' %}
             </section>
+            <!-- content section -->
             <section class="col-xl-10 col-lg-10 bg-white">
                 <div class="row h-100">
                     {% lorem 10 p %}

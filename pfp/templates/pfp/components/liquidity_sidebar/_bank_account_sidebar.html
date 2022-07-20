@@ -1,0 +1,41 @@
+<div class="accordion-item bg-dark text-white p-0 m-0">
+    <h2 class="accordion-header p-0 m-0 d-flex justify-content-center" id="accountsSidebar-headingOne">
+        <button
+            class="bg-dark text-white h5 p-0 mt-2 pb-2 border-0"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#accountsSidebar-collapseOne"
+            aria-expanded="true"
+            aria-controls="accountsSidebar-collapseOne">
+            <i class="fa fa-bank"></i> 
+            <span class="p-0 m-0 ps-1">
+                Bank Accounts
+            </span>
+        </button>
+    </h2>
+    <div
+    id="accountsSidebar-collapseOne"
+    class="accordion-collapse collapse show"
+    aria-labelledby="accountsSidebar-headingOne"
+    >
+        <div class="accordion-body p-0 m-0 ps-2">
+            <ul class="list-group list-group-flush p-0 m-0">
+                    {% for bank_account in bank_accounts %}
+                    <li class="list-group-item bg-dark text-white p-0 py-1 pe-2 d-flex flex-column justify-content-lg-evenly">
+                        <div class="d-flex justify-content-between">
+                            <span>{{ bank_account.memo }}</span>
+                            <span><i class="fa fa-credit-card"></i></span>
+                        </div>
+                        <div class="ps-1 d-flex justify-content-between">
+                            <span class="small text-light">{{ bank_account.card_number }}</span>
+                            <span class="small text-light">IRR {{ bank_account.balance }}</span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+        </div>
+    </div>
+    <div class="accordion-body p-0 m-0 ps-2">
+        Total
+    </div>
+</div>
