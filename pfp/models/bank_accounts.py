@@ -1,5 +1,3 @@
-from operator import mod
-from pyexpat import model
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -28,6 +26,16 @@ class BankAccount(models.Model):
         ('saving', 'saving'),
     )
 
+    CURRENCY_CODE_CHOICES = (
+        ('AUD', 'AUD'),
+        ('CAD', 'CAD'),
+        ('EUR', 'EUR'),
+        ('IRR', 'IRR'),
+        ('TRY', 'TRY'),
+        ('USD', 'USD'),
+        ('CNY', 'CNY'),
+    )
+
     bank_account_id = models.AutoField(
         primary_key=True,
     )
@@ -36,6 +44,10 @@ class BankAccount(models.Model):
         max_length=16,
         choices=ACCOUNT_TYPE_CHOICES,
         default='checking',
+    )
+
+    memo = models.CharField(
+        max_length=20,
     )
 
     IBAN = models.CharField(
@@ -51,6 +63,11 @@ class BankAccount(models.Model):
     card_expire_date = models.DateField(
         null=True,
         blank=True,
+    )
+
+    currency_code = models.CharField(
+        max_length=3,
+        choices=CURRENCY_CODE_CHOICES,
     )
 
     balance = models.DecimalField(

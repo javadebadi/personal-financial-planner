@@ -1,22 +1,22 @@
 <div class="accordion-item bg-dark text-white p-0 m-0">
-    <h2 class="accordion-header p-0 m-0 d-flex justify-content-center" id="accountsSidebar-headingOne">
+    <h2 class="accordion-header p-0 m-0 d-flex justify-content-center" id="goldSidebar-headingOne">
         <button
             class="bg-dark text-white h5 p-0 mt-2 pb-2 border-0"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#accountsSidebar-collapseOne"
+            data-bs-target="#goldSidebar-collapseOne"
             aria-expanded="true"
-            aria-controls="accountsSidebar-collapseOne">
-            <i class="fa fa-bank"></i> 
+            aria-controls="goldSidebar-collapseOne">
+            <i class="fa fa-coins"></i>
             <span class="p-0 m-0 ps-1">
-                Bank Accounts
+                Golds
             </span>
         </button>
     </h2>
     <div
-    id="accountsSidebar-collapseOne"
+    id="goldSidebar-collapseOne"
     class="accordion-collapse collapse show"
-    aria-labelledby="accountsSidebar-headingOne"
+    aria-labelledby="goldSidebar-headingOne"
     >
         <div class="accordion-body p-0 m-0 ps-2">
             <ul class="list-group list-group-flush p-0 m-0">
@@ -24,7 +24,7 @@
                 <li class="list-group-item bg-dark text-white p-0 py-1 pe-2 d-flex flex-column justify-content-lg-evenly">
                     <div class="d-flex justify-content-between">
                         <span>{{ bank_account.memo }}</span>
-                        <span><i class="fa fa-credit-card"></i></span>
+                        <i class="fa-regular fa-gem"></i>
                     </div>
                     <div class="ps-1 d-flex justify-content-between">
                         <span class="small text-light">{{ bank_account.card_number }}</span>
