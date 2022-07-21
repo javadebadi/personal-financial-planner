@@ -8,6 +8,11 @@ User = get_user_model()
 
 class Transaction(models.Model):
 
+    INFLOW_CHOICES = (
+        ('I', 'inflow'),
+        ('O', 'outflow'),
+    )
+
     transaction_id = models.CharField(
         max_length=48,
         primary_key=True,
@@ -33,7 +38,12 @@ class Transaction(models.Model):
         default=0,
         )
 
-    transaction_time = models.TimeField()
+    transaction_datetime = models.DateTimeField()
+
+    inflow = models.CharField(
+        max_length=1,
+        choices=INFLOW_CHOICES,
+    )
 
     def __str__(self) -> str:
         return super().__str__()
@@ -43,12 +53,12 @@ class Transaction(models.Model):
             return super(Transaction, self).save(*args, **kwargs)
         else:
             self.transaction_id = str(self.user.id).rjust(10, '0') + '-'
-            self.transaction_id += str(make_naive(self.transaction_time)) + '-'
+            self.transaction_id += str(self.transaction_datetime) + '-'
             self.transaction_id +=  str(self.bank_account.bank_account_id).rjust(10, '0')
             return super(Transaction, self).save(*args, **kwargs)
 
     class Meta:
         ordering = (
-            '-transaction_time',
+            '-transaction_datetime',
         )
 
