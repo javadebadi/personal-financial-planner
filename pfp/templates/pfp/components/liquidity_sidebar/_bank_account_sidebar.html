@@ -1,3 +1,4 @@
+
 <div class="accordion-item bg-dark text-white p-0 m-0">
     <h2 class="accordion-header p-0 m-0 d-flex justify-content-center" id="accountsSidebar-headingOne">
         <button
@@ -24,7 +25,18 @@
                 <li class="list-group-item bg-dark text-white p-0 py-1 pe-2 d-flex flex-column justify-content-lg-evenly">
                     <div class="d-flex justify-content-between">
                         <span>{{ bank_account.memo }}</span>
-                        <span><i class="fa fa-credit-card"></i></span>
+                        <span>
+                            <a
+                                style="cursor: pointer;"
+                                data-target="#accountInfoModalCenter"
+                                data-bs-toggle="modal"
+                                data-bs-target="#accountInfoModal"
+                                data-bs-whatever=""
+                                onclick="getAccountInfo({{ bank_account.bank_account_id }})"
+                                >
+                                <i class="fa fa-credit-card"></i>
+                            </a>
+                        </span>
                     </div>
                     <div class="ps-1 d-flex justify-content-between">
                         <span class="small text-light">{{ bank_account.card_number }}</span>
@@ -45,3 +57,27 @@
         </div>
     </div>
 </div>
+
+<!-- modal for account information details -->
+<div class="modal fade text-dark" id="accountInfoModal" tabindex="-1" aria-labelledby="accountInfoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="accountInfoModalLabel">Account Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="accountInfoBody">
+          Account Details
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+    {% include './_bank_account_sidebar.js' %}
+</script>
