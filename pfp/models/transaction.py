@@ -14,7 +14,7 @@ class Transaction(models.Model):
     )
 
     transaction_id = models.CharField(
-        max_length=48,
+        max_length=50,
         primary_key=True,
     )
 
@@ -49,13 +49,7 @@ class Transaction(models.Model):
         return super().__str__()
 
     def save(self, *args, **kwargs) -> str:
-        if self.transaction_id is None:
-            return super(Transaction, self).save(*args, **kwargs)
-        else:
-            self.transaction_id = str(self.user.id).rjust(10, '0') + '-'
-            self.transaction_id += str(self.transaction_datetime) + '-'
-            self.transaction_id +=  str(self.bank_account.bank_account_id).rjust(10, '0')
-            return super(Transaction, self).save(*args, **kwargs)
+        return super(Transaction, self).save(*args, **kwargs)
 
     class Meta:
         ordering = (
