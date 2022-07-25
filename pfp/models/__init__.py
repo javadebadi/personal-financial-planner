@@ -6,3 +6,6 @@ from .bank_accounts import (
 from .transaction import (
     Transaction,
 )
+from .asset import (
+    AssetCategory,
+)
