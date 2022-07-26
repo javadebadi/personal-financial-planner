@@ -47,6 +47,23 @@ class BankAccountBR:
             s = "0"
         return s
 
+    def display_single_bank_account(self, bank_account_id: int) -> dict:
+        """Retrives basic information about give account
+        """
+        if type(bank_account_id) == int:
+            obj = BankAccount.objects.get(user=self.user, bank_account_id=bank_account_id)
+        elif isinstance(bank_account_id, BankAccount):
+            obj = bank_account_id
+
+        data = {}
+        data['card_number'] = BankAccountBR.display_card_number(obj.card_number)
+        data['bank_name'] = obj.bank.bank_name
+        data['balance'] = BankAccountBR.display_balance(obj.balance)
+        data['memo'] = obj.memo
+        data['currency_code'] = obj.currency_code
+        data['bank_account_id'] = obj.bank_account_id
+        return data
+
     def display(self) -> List[dict]:
         """Retrieves basic information about user accounts
 
@@ -55,12 +72,7 @@ class BankAccountBR:
         """
         bank_accounts = []
         for obj in self._bank_accounts_objs:
-            data = {}
-            data['card_number'] = BankAccountBR.display_card_number(obj.card_number)
-            data['bank_name'] = obj.bank.bank_name
-            data['balance'] = BankAccountBR.display_balance(obj.balance)
-            data['memo'] = obj.memo
-            data['currency_code'] = obj.currency_code
+            data = self.display_single_bank_account(obj)
             bank_accounts.append(data)
         return bank_accounts
 
