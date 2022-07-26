@@ -8,4 +8,5 @@ from .transaction import (
 )
 from .asset import (
     AssetCategory,
+    AssetSubCategory,
 )

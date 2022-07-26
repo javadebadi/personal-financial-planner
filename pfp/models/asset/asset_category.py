@@ -37,6 +37,9 @@ class AssetCategory(models.Model):
         max_length=64,
     )
 
+    def __str__(self) -> str:
+        return self.name + ' | ' + self.user.__str__()
+
 
     class Meta:
         verbose_name = "Asset Category"
