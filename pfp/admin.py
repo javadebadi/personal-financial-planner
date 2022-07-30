@@ -5,6 +5,7 @@ from pfp.models import (
     Transaction,
     AssetCategory,
     AssetSubCategory,
+    Asset,
 )
 
 # Register your models here.
@@ -51,4 +52,20 @@ class AssetCategoryAdmin(admin.ModelAdmin):
 
     list_filter = (
         'user',
+    )
+
+@admin.register(Asset)
+class AssetAdmin(admin.ModelAdmin):
+    list_display = (
+        'asset_id',
+        'user',
+        'name',
+        'category',
+        'sub_category',
+        )
+
+    list_filter = (
+        'user',
+        'category',
+        'sub_category',
     )

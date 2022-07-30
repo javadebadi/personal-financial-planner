@@ -4,10 +4,12 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from .asset_category import AssetCategory
+from ..base import BaseItem
+
 User = get_user_model()
 
 
-class AssetSubCategory(models.Model):
+class AssetSubCategory(BaseItem):
 
     """Class to determine asset sub categories of users.
     
@@ -28,17 +30,6 @@ class AssetSubCategory(models.Model):
     asset_subcategory_id = models.AutoField(
         primary_key=True,
         )
-    
-    user = models.ForeignKey(
-        User,
-        db_column='user_id',
-        on_delete=models.CASCADE,
-        related_name='asset_subcategories',
-    )
-
-    name = models.CharField(
-        max_length=64,
-    )
 
     category = models.ForeignKey(
         AssetCategory,

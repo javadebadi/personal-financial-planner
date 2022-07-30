@@ -3,10 +3,11 @@
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from ..base import BaseItem
 User = get_user_model()
 
 
-class AssetCategory(models.Model):
+class AssetCategory(BaseItem):
 
     """Class to determine asset categories of users.
     
@@ -26,16 +27,6 @@ class AssetCategory(models.Model):
         primary_key=True,
         )
     
-    user = models.ForeignKey(
-        User,
-        db_column='user_id',
-        on_delete=models.CASCADE,
-        related_name='asset_categories',
-    )
-
-    name = models.CharField(
-        max_length=64,
-    )
 
     def __str__(self) -> str:
         return self.name + ' | ' + self.user.__str__()
