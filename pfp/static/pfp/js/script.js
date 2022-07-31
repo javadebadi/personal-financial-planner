@@ -57,3 +57,21 @@ function createTable(
     _addTableData(tbl, data);
     return tbl;
 }
+
+
+function appendRowToTable(table_id, rowData, styleData=null) {
+    // find table with give id
+    const table = document.getElementById(table_id);
+    // Create an empty <tr> element and add it to the 1st position of the table:
+    var row = table.insertRow(table.rows.length);
+    let cells = [];
+    for(let cellIndex=0; cellIndex < rowData.length; cellIndex++) {
+        cells.push(
+            row.insertCell(cellIndex)
+            );
+        if (styleData && styleData[cellIndex]) {
+            row.classList.add(styleData[cellIndex]);
+        }
+        cells[cellIndex].innerHTML = rowData[cellIndex]
+    }
+}
