@@ -181,3 +181,30 @@ class AssetBR:
         assets_categories = AssetCategory.objects.filter(user=self.user)
         serializer = AssetCategorySerializer(assets_categories, many=True)
         return serializer.data
+
+    def add_subcategory(
+        self,
+        category: AssetCategory,
+        name: str,
+        ) -> None:
+        """
+        Parameters
+        ----------
+        category: AssetCategory
+            category is either AssetCategory object or integer that determines
+            an asset category
+        name : str
+            name of the subcategory
+
+        """
+        if isinstance(category, AssetCategory):
+            assert category.user == self.user
+        elif type(category) == int:
+            category = AssetCategory.objects.get(user=self.user, pk=category)
+
+        subcategory = AssetSubCategory()
+        subcategory.name = name
+        subcategory.user = self.user
+        subcategory.category = category
+        subcategory.save()
+        return subcategory()
