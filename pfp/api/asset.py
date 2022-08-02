@@ -1,4 +1,3 @@
-from pfp.models.asset import asset_category
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from pfp.models import (
@@ -8,10 +7,13 @@ from pfp.models import (
 )
 from rest_framework import serializers
 from pfp.business_rules.asset import AssetBR
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class AssetCategoyListAPIView(APIView):
 
     def get(self, request):
@@ -160,6 +162,37 @@ class AssetCategoyListAPIView(APIView):
                 "detail": "got user assets categories successfully",
                 }
                 )
+
+class AssetSubCategoryCreateAPIView(APIView):
+
+    def post(self, request):
+        br = AssetBR(user=request.user)
+        category_id = request.data['category_id']
+        name = request.data['name']
+        result = br.add_subcategory(
+            category=category_id,
+            name=name,
+        )
+        return Response(
+            data={
+                "result": result,
+                "detail": "Subcategory added successfully!",
+            },
+            status=201,
+        )
+
+class AssetSubCategoryDeleteAPIView(APIView):
+
+    def delete(self, request, pk):
+        br = AssetBR(user=request.user)
+        br.delete_subcategory(asset_subcategory_id=pk)
+        return Response(
+            data={
+                "result":  {"asset_subcategory_id": pk},
+                "detail": "Subcategory deleted successfully!",
+            },
+            status=200,
+        )
 
 class AssetsListAPIView(APIView):
 
