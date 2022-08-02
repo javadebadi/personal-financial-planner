@@ -12,7 +12,7 @@ class AssetSubCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AssetSubCategory
-        fields = ['asset_subcategory_id', 'name']
+        fields = ['asset_subcategory_id', 'name', 'category']
         depth = 0
 
 
@@ -207,4 +207,14 @@ class AssetBR:
         subcategory.user = self.user
         subcategory.category = category
         subcategory.save()
-        return subcategory()
+        return AssetSubCategorySerializer(subcategory, many=False).data
+
+    def delete_subcategory(
+        self,
+        asset_subcategory_id,
+        ) -> None:
+        AssetSubCategory.objects.get(
+            user=self.user,
+            asset_subcategory_id=asset_subcategory_id
+            ).delete()
+        return None
