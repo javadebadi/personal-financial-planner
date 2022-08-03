@@ -35,4 +35,8 @@ class AssetCategory(BaseItem):
     class Meta:
         verbose_name = "Asset Category"
         verbose_name_plural = "Asset Categories"
+        ordering = (
+            'user',
+            'name',
+        )
 
