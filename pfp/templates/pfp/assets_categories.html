@@ -1,0 +1,69 @@
+{% extends 'pfp/base.html' %}
+{% load static %}
+
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block maincontent %}
+<div class="row p-5 small">
+    {% for cateogry in assets_categories %}
+    <div class="card mx-3 my-2 col-12 col-md-12 shadow-lg  bg-body rounded">
+        <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
+        <div class="card-body">
+            <h5 class="card-title pb-2 d-flex justify-content-between">
+                <span>
+                    {{ cateogry.name }}
+                    <i class="fa fa-edit px-2 small" style="cursor: pointer; color:#708d81;"></i>
+                </span>
+                <span>
+                    <i onclick="addAssetSubCategoryRowInput('asset-{{cateogry.asset_category_id}}',{{cateogry.asset_category_id}})"
+                        class="fa fa-plus-circle px-2 large" style="cursor: pointer; color:#003333;"></i>
+                </span>
+            </h5>
+            <table class="table table-hover table-striped" id="asset-{{cateogry.asset_category_id}}">
+                <tbody>
+                    {% for subcategory in cateogry.subcategories %}
+                    <tr id='asset-sub-category-{{subcategory.asset_subcategory_id}}'>
+                        <td>
+                            {{ subcategory.name }}
+                        </td>
+                        <td class="text-end">
+                            <i
+                                onclick="deleteAssetSubCategory({{subcategory.asset_subcategory_id}})"
+                                class="fa fa-trash px-1"
+                                style="cursor: pointer; color:#a70605;"
+                                >
+                            </i>
+                            <i
+                                onclick="updateAssetSubCategory({{subcategory.asset_subcategory_id}})"
+                                class="fa fa-edit px-1"
+                                style="cursor: pointer;color:#708d81;"
+                                >
+                            </i>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+
+
+
+
+
+
+
+<script>
+{% include 'pfp/components/asset/asset_categories.js' %}
+</script>
+
+
+{% endblock maincontent %}
