@@ -11,3 +11,6 @@ from .asset import (
     AssetSubCategory,
     Asset,
 )
+from .currency import (
+    Currency,
+)

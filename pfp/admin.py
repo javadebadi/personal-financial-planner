@@ -6,11 +6,13 @@ from pfp.models import (
     AssetCategory,
     AssetSubCategory,
     Asset,
+    Currency,
 )
 
 # Register your models here.
 admin.site.register(Bank)
 admin.site.register(BankAccount)
+admin.site.register(Currency)
 
 
 @admin.register(Transaction)
