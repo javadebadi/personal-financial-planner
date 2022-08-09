@@ -1,3 +1,21 @@
+// a function to get cookie
+// reference: https://www.w3schools.com/js/js_cookies.asp
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+    }
+
 // adds header to table tbl
 function _addTableHeader(
     tbl,
@@ -59,19 +77,23 @@ function createTable(
 }
 
 
-function appendRowToTable(table_id, rowData, styleData=null) {
+function appendRowToTable(table_id, rowData, rowID, styleData=null) {
     // find table with give id
     const table = document.getElementById(table_id);
     // Create an empty <tr> element and add it to the 1st position of the table:
-    var row = table.insertRow(table.rows.length);
+    let row = table.insertRow(table.rows.length);
+    console.log("add new row")
+    row.id = rowID;
     let cells = [];
     for(let cellIndex=0; cellIndex < rowData.length; cellIndex++) {
         cells.push(
             row.insertCell(cellIndex)
             );
-        if (styleData && styleData[cellIndex]) {
-            row.classList.add(styleData[cellIndex]);
+            if (styleData && styleData[cellIndex]) {
+                row.classList.add(styleData[cellIndex]);
+            }
+            cells[cellIndex].innerHTML = rowData[cellIndex]
         }
-        cells[cellIndex].innerHTML = rowData[cellIndex]
     }
-}
+
+
