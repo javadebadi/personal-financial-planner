@@ -11,7 +11,7 @@
     <h1>Assets</h1>
     <div class="dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Dropdown
+          Asset Category
         </button>
         <ul class="dropdown-menu" id="asset_categories_dropdown">
         </ul>
@@ -33,36 +33,52 @@
     // functions to set attributes of new assets
     function AssetCategoryDropDownClick(event) {
         newAsset.assetCategoryId = +(event.target.id.replace("asset-category-", ""))
-        console.log(newAsset.assetCategoryId);
+        console.log("Asset Category id = ", newAsset.assetCategoryId);
     }
     const assetCategoriesDropDown = document.getElementById('asset_categories_dropdown')
-    const assetCategoriesItems = [
+    const assetCategoriesListURL = 'http://localhost:8000/pfp/api/assets_categories/list/'
+
+    fetch(
+        assetCategoriesListURL, 
         {
-            "name":'Action',
-            "value": 1,
-        },
-        {
-            "name":'Another Action',
-            "value": 2,
-        },
-        {
-            "name":'Something else ',
-            "value": 3,
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
         }
-    ]
-    console.log(assetCategoriesItems.length)
-    for (let i=0; i < assetCategoriesItems.length; i++) {
-        console.log("i = ", i)
-        let liItem = document.createElement('li')
-        let dropdownItem = document.createElement('button')
-        dropdownItem.classList.add('dropdown-item')
-        dropdownItem.setAttribute('type', 'button')
-        dropdownItem.setAttribute('onclick', 'AssetCategoryDropDownClick(event)')
-        dropdownItem.setAttribute('id', `asset-category-${assetCategoriesItems[i]["value"]}`)
-        dropdownItem.innerText = assetCategoriesItems[i]["name"]
-        liItem.appendChild(dropdownItem);
-        assetCategoriesDropDown.appendChild(liItem);
-    }
+        )
+    .then((response) => response.json())
+    .then(
+        (data) => {
+            console.log("Data:", data.results);
+            const assetCategoriesItems = data.results;
+            return assetCategoriesItems;
+        }
+    )
+    .then(
+        (assetCategoriesItems) => {
+            console.log(assetCategoriesItems.length)
+            for (let i=0; i < assetCategoriesItems.length; i++) {
+                console.log("i = ", i)
+                let liItem = document.createElement('li')
+                let dropdownItem = document.createElement('button')
+                dropdownItem.classList.add('dropdown-item')
+                dropdownItem.setAttribute('type', 'button')
+                dropdownItem.setAttribute('onclick', 'AssetCategoryDropDownClick(event)')
+                dropdownItem.setAttribute('id', `asset-category-${assetCategoriesItems[i]["asset_category_id"]}`)
+                dropdownItem.innerText = assetCategoriesItems[i]["name"]
+                liItem.appendChild(dropdownItem);
+                assetCategoriesDropDown.appendChild(liItem);
+            }
+        }
+    )
+    .catch(
+        (error) => {
+            console.error('Error:', error);
+        }
+    );
+
+     
     console.log("4")
 </script>
 {% endblock components %}
