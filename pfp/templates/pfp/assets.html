@@ -1,0 +1,68 @@
+{% extends 'pfp/base.html' %}
+{% load static %}
+
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block maincontent %}
+<div class="row p-5 small">
+    <h1>Assets</h1>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Dropdown
+        </button>
+        <ul class="dropdown-menu" id="asset_categories_dropdown">
+        </ul>
+      </div>
+</div>
+
+{% endblock maincontent %}
+
+
+{% block components %}
+<script>
+    // adding new asset category
+    // variables to store information of new asset category
+    let newAsset = {
+        assetCategoryId: null
+    }
+
+
+    // functions to set attributes of new assets
+    function AssetCategoryDropDownClick(event) {
+        newAsset.assetCategoryId = +(event.target.id.replace("asset-category-", ""))
+        console.log(newAsset.assetCategoryId);
+    }
+    const assetCategoriesDropDown = document.getElementById('asset_categories_dropdown')
+    const assetCategoriesItems = [
+        {
+            "name":'Action',
+            "value": 1,
+        },
+        {
+            "name":'Another Action',
+            "value": 2,
+        },
+        {
+            "name":'Something else ',
+            "value": 3,
+        }
+    ]
+    console.log(assetCategoriesItems.length)
+    for (let i=0; i < assetCategoriesItems.length; i++) {
+        console.log("i = ", i)
+        let liItem = document.createElement('li')
+        let dropdownItem = document.createElement('button')
+        dropdownItem.classList.add('dropdown-item')
+        dropdownItem.setAttribute('type', 'button')
+        dropdownItem.setAttribute('onclick', 'AssetCategoryDropDownClick(event)')
+        dropdownItem.setAttribute('id', `asset-category-${assetCategoriesItems[i]["value"]}`)
+        dropdownItem.innerText = assetCategoriesItems[i]["name"]
+        liItem.appendChild(dropdownItem);
+        assetCategoriesDropDown.appendChild(liItem);
+    }
+    console.log("4")
+</script>
+{% endblock components %}
