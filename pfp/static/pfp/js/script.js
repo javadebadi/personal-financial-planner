@@ -97,3 +97,51 @@ function appendRowToTable(table_id, rowData, rowID, styleData=null) {
     }
 
 
+// -----------------------------------------------------------------------
+// ------------------- DropDown Functions --------------------------------
+// -----------------------------------------------------------------------
+// The functions below are used to created dropdown list for a ul element
+// with specific id
+
+// a function to create li element to be used inside a dropdown element
+function _djbCreateDropDownLiElement(
+    id,
+    text,
+    classList,
+    events,
+    ) {
+        let liItem = document.createElement('li')
+        let dropdownItem = document.createElement('button')
+        dropdownItem.classList.add(...classList)
+        dropdownItem.setAttribute('type', 'button')
+        for(const key in events) {
+            dropdownItem.setAttribute(key, events[key])
+        }
+        dropdownItem.setAttribute('id', id)
+        dropdownItem.innerText = text
+        liItem.appendChild(dropdownItem);
+        return liItem
+    }
+
+// a function to create dropdown for a ul element with given
+// list of objects
+function djbCreateDropDownElement(
+    ulElement,
+    idPrefix,
+    idKey,
+    nameKey,
+    listOfOobjects,
+    classList,
+    events,
+) {
+    for (let i=0; i < listOfOobjects.length; i++) {
+            let liItem = _djbCreateDropDownLiElement(
+                id=`${idPrefix}${listOfOobjects[i][idKey]}`,
+                text=listOfOobjects[i][nameKey],
+                classList=classList,
+                events=events
+            )
+            ulElement.appendChild(liItem)
+        } 
+    return ulElement
+}
