@@ -9,13 +9,22 @@
 {% block maincontent %}
 <div class="row p-5 small">
     <h1>Assets</h1>
-    <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Asset Category
-        </button>
-        <ul class="dropdown-menu" id="asset_categories_dropdown">
-        </ul>
-      </div>
+    <div class="row bg-white">
+        <div class="col-md-4 col-lg-4 col-xl-2 p-2 dropdown">
+            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="asset_categories_dropdown_btn">
+              Asset Category
+            </button>
+            <ul class="dropdown-menu w-100" id="asset_categories_dropdown">
+            </ul>
+          </div>
+        <div class="col-md-4 col-lg-4 col-xl-3 p-2 dropdown">
+            <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="asset_subcategories_dropdown_btn">
+              Asset Sub Category
+            </button>
+            <ul class="dropdown-menu w-100" id="asset_subcategories_dropdown">
+            </ul>
+          </div>
+    </div>
 </div>
 
 {% endblock maincontent %}
@@ -23,6 +32,13 @@
 
 {% block components %}
 <script>
+    const assetCategoriesDropDown = document.getElementById('asset_categories_dropdown')
+    const assetCategoriesDropDownBtn = document.getElementById('asset_categories_dropdown_btn')
+    const assetSubCategoriesDropDown = document.getElementById('asset_subcategories_dropdown')
+    const assetSubCategoriesDropDownBtn = document.getElementById('asset_subcategories_dropdown_btn')
+    const assetSubCategories = {}
+    const assetCategories = {}
+    const assetCategoriesListURL = 'http://localhost:8000/pfp/api/assets_categories/list/'
     // adding new asset category
     // variables to store information of new asset category
     let newAsset = {
@@ -30,13 +46,92 @@
     }
 
 
+    function _djbCreateDropDownLiElement(
+        id,
+        text,
+        classList,
+        events,
+        ) {
+            let liItem = document.createElement('li')
+            let dropdownItem = document.createElement('button')
+            dropdownItem.classList.add(...classList)
+            dropdownItem.setAttribute('type', 'button')
+            for(const key in events) {
+                dropdownItem.setAttribute(key, events[key])
+            }
+            dropdownItem.setAttribute('id', id)
+            dropdownItem.innerText = text
+            liItem.appendChild(dropdownItem);
+            return liItem
+        }
+
+    function djbCreateDropDownElement(
+        ulElement,
+        idPrefix,
+        idKey,
+        nameKey,
+        listOfOobjects,
+        classList,
+        events,
+    ) {
+        for (let i=0; i < listOfOobjects.length; i++) {
+                let liItem = _djbCreateDropDownLiElement(
+                    id=`${idPrefix}${listOfOobjects[i][idKey]}`,
+                    text=listOfOobjects[i][nameKey],
+                    classList=classList,
+                    events=events
+                )
+                ulElement.appendChild(liItem)
+            } 
+        return ulElement
+    }
+
+
     // functions to set attributes of new assets
     function AssetCategoryDropDownClick(event) {
         newAsset.assetCategoryId = +(event.target.id.replace("asset-category-", ""))
         console.log("Asset Category id = ", newAsset.assetCategoryId);
+        console.log(event.innerText)
+        assetCategoriesDropDownBtn.innerText = assetCategories[newAsset.assetCategoryId]
+        assetCategoriesDropDownBtn.classList.add('bg-success')
+        console.log(assetCategoriesDropDown)
+
+        // fill the second dropdown (for sub categories of the assets)
+        const subCategories = assetSubCategories[newAsset.assetCategoryId];
+
+        assetSubCategoriesDropDown.innerHTML = ''
+        assetSubCategoriesDropDownBtn.innerText = 'Asset Sub Category'
+        assetSubCategoriesDropDownBtn.classList.remove("bg-success")
+        djbCreateDropDownElement(
+            ulElement=assetSubCategoriesDropDown,
+            idPrefix='asset-subcategory-',
+            idKey='asset_subcategory_id',
+            nameKey='name',
+            listOfOobjects=subCategories,
+            classList=['dropdown-item', 'w-100'],
+            events={
+                'onclick': 'AssetSubCategoryDropDownClick(event)',
+            }
+        )
+
     }
-    const assetCategoriesDropDown = document.getElementById('asset_categories_dropdown')
-    const assetCategoriesListURL = 'http://localhost:8000/pfp/api/assets_categories/list/'
+
+    function AssetSubCategoryDropDownClick(event) {
+        newAsset.assetSubCategoryId = +(event.target.id.replace("asset-subcategory-", ""))
+        console.log("Asset SubCategory id = ", newAsset.assetSubCategoryId);
+        let currentSubCategories = assetSubCategories[newAsset.assetCategoryId]
+        console.log(currentSubCategories)
+        for(let i=0; i < currentSubCategories.length; i++) {
+            if (currentSubCategories[i]["asset_subcategory_id"] == newAsset.assetSubCategoryId) {
+                assetSubCategoriesDropDownBtn.innerText = currentSubCategories[i]["name"]
+                assetSubCategoriesDropDownBtn.classList.add("bg-success")
+            }
+        }
+
+        // fill the second dropdown (for sub categories of the assets)
+        // const subCategories = assetSubCategories[newAsset.assetCategoryId];
+    }
+
 
     fetch(
         assetCategoriesListURL, 
@@ -52,24 +147,52 @@
         (data) => {
             console.log("Data:", data.results);
             const assetCategoriesItems = data.results;
+            assetCategoriesItems.forEach(
+                elem => {
+                    assetCategories[elem.asset_category_id] = (elem.name)
+                    // associate array of subcategories of each category
+                    // to the key of name asset_category_id
+                    assetSubCategories[elem.asset_category_id] = (elem.subcategories)
+                }
+            );
+            // after this for each the `assetSubCategories` variable must be something like this
+            // {
+            //     "117": [
+            //         {
+            //             "asset_subcategory_id": 476,
+            //             "name": "Cash",
+            //             "category": 117
+            //         },
+            //     ],
+            //     "118": [
+            //         {
+            //             "asset_subcategory_id": 484,
+            //             "name": "Art",
+            //             "category": 118
+            //         },
+            //         {
+            //             "asset_subcategory_id": 483,
+            //             "name": "Boats",
+            //             "category": 118
+            //         },
+            //     ]
+            // }
             return assetCategoriesItems;
         }
     )
     .then(
         (assetCategoriesItems) => {
-            console.log(assetCategoriesItems.length)
-            for (let i=0; i < assetCategoriesItems.length; i++) {
-                console.log("i = ", i)
-                let liItem = document.createElement('li')
-                let dropdownItem = document.createElement('button')
-                dropdownItem.classList.add('dropdown-item')
-                dropdownItem.setAttribute('type', 'button')
-                dropdownItem.setAttribute('onclick', 'AssetCategoryDropDownClick(event)')
-                dropdownItem.setAttribute('id', `asset-category-${assetCategoriesItems[i]["asset_category_id"]}`)
-                dropdownItem.innerText = assetCategoriesItems[i]["name"]
-                liItem.appendChild(dropdownItem);
-                assetCategoriesDropDown.appendChild(liItem);
-            }
+            djbCreateDropDownElement(
+                ulElement=assetCategoriesDropDown,
+                idPrefix='asset-category-',
+                idKey='asset_category_id',
+                nameKey='name',
+                listOfOobjects=assetCategoriesItems,
+                classList=['dropdown-item', 'w-100'],
+                events={
+                    'onclick': 'AssetCategoryDropDownClick(event)'
+                }
+            )
         }
     )
     .catch(
