@@ -4,6 +4,7 @@ from pfp.models import (
     AssetCategory,
     AssetSubCategory,
     Asset,
+    Currency,
 )
 User = get_user_model()
 
@@ -22,6 +23,13 @@ class AssetCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = AssetCategory
         fields = ['asset_category_id', 'name', 'subcategories']
+        depth = 1
+
+class AssetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Asset
+        fields = "__all__"
         depth = 1
 
 
@@ -218,3 +226,23 @@ class AssetBR:
             asset_subcategory_id=asset_subcategory_id
             ).delete()
         return None
+
+    def add(
+        self,
+        sub_category_id: int,
+        amount: float,
+        unit_value: float,
+        unit_value_currency_code: str,
+        ):
+        """Adds new Asset to Asset table
+        """
+        a = Asset()
+        a.amount = amount
+        a.sub_category = AssetSubCategory.objects.get(pk=sub_category_id)
+        a.category = a.sub_category.category
+        a.unit_value_currency_code = Currency.objects.get(code=unit_value_currency_code)
+        a.user = self.user
+        a.unit_value = unit_value
+        a.save()
+        return AssetSerializer(a, many=False).data
+        
