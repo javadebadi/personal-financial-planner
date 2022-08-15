@@ -64,6 +64,9 @@ class AssetAdmin(admin.ModelAdmin):
         'name',
         'category',
         'sub_category',
+        'amount',
+        'unit_value',
+        'unit_value_currency_code',
         )
 
     list_filter = (
