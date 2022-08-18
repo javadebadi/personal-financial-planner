@@ -7,30 +7,44 @@
 {% endblock %}
 
 {% block maincontent %}
-<div class="row p-5 small">
-    <h1>Assets</h1>
-    <form class="row bg-white" id='create_asset_form'>
+<div class="row px-5 small pt-1">
+    <h1 class="h1">Assets</h1>
+    <form class="form-group row bg-white pt-0 col-12" id='create_asset_form'>
         {% csrf_token %}
-        <div class="col-md-4 col-lg-4 col-xl-2 p-2 dropdown">
+        <div class="col-xl-2 col-lg-2 col-sm-3 col-6">
+            <input class="form-control" type="number" title="amount" value="0" name="amount" placeholder="amount">
+        </div>
+        <div class="col-xl-2 col-lg-2 col-sm-3 col-6">
+            <input class="form-control" type="number" title="unit_value"  name="unit_value" placeholder="unit_value">
+        </div>
+        <div class="col-xl-1 col-lg-2 col-sm-2 col-3">
+            <input class="form-control" type="text" title="currency_code" value="USD" name="currency_code" placeholder="currency code">
+        </div>
+        <div class="col-md-4 col-lg-4 col-xl-2 col-6 dropdown">
             <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="asset_categories_dropdown_btn">
               Asset Category
             </button>
             <ul class="dropdown-menu w-100" id="asset_categories_dropdown">
             </ul>
           </div>
-        <div class="col-md-4 col-lg-4 col-xl-3 p-2 dropdown">
+        <div class="col-md-4 col-lg-4 col-xl-3 col-6 dropdown">
             <button class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="asset_subcategories_dropdown_btn">
               Asset Sub Category
             </button>
             <ul class="dropdown-menu w-100" id="asset_subcategories_dropdown">
             </ul>
         </div>
-        <div class="col-md-1 col-lg-1 col-xl-1 p-2 dropdown">
+        <div class="col-lg-2 col-xl-1 col-md-2 col-sm-3 dropdown m-0">
             <button class="btn btn-primary w-100" type="button" id="create_asset_from_btn" onclick="addAsset()">
               Register
             </button>
         </div>
     </form>
+    <div class="card mt-5 bg-light rounded">
+        <table class="table table-hover mt-5 p-2 b-1 table-bordered bg-white" id="assets_grid">
+    
+        </table>
+    </div>
 </div>
 
 {% endblock maincontent %}
@@ -179,9 +193,9 @@
         console.log("csrftoken = ", csrftoken)
         const data = {
             'asset_sub_category_id': newAsset.assetSubCategoryId,
-            'amount': 0,
-            'unit_value': 0,
-            'unit_value_currency_code': 'USD',
+            'amount': +formData.get("amount"),
+            'unit_value': +formData.get("unit_value"),
+            'unit_value_currency_code': formData.get("currency_code"),
             'asset_category_id': newAsset.assetCategoryId,
         };
         console.log(data);
@@ -204,5 +218,26 @@
         }
      
     console.log("4")
+
+    getAndCreateAJAXPFPTable(
+        url='http://localhost:8000/pfp/api/assets/list/',
+        datamodel={
+            "category": {
+                "asset_category_id": null,
+                "name": null,
+            },
+            "sub_category": {
+                "asset_sub_category_id": null,
+                "name": null,
+            },
+            "amount": null,
+            "unit_value": null,
+            "unit_value_currency_code": {
+                "code": null,
+                "name": null,
+            },
+        },
+        tableID='assets_grid',
+    )
 </script>
 {% endblock components %}

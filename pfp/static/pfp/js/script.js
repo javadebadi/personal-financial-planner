@@ -145,3 +145,80 @@ function djbCreateDropDownElement(
         } 
     return ulElement
 }
+
+
+// a function to create custom table for PFP application
+function createPFPTable(
+    tableId,
+    datamodel,
+    data,
+    ) {
+    console.log(datamodel)
+    const table = document.getElementById(tableId)
+    table.innerHTML = ''
+    const tbody = document.createElement('tbody')
+    table.appendChild(tbody)
+    console.log("PFP table", table)
+    for (const item of data) {
+        const tr = document.createElement('tr')
+        tbody.appendChild(tr)
+        for (const key of Object.keys(datamodel)) {
+            // create a cell (column) inside the tr row
+            const col = document.createElement('td')
+            if (datamodel[key] == null) {
+                // set text inside cell
+                col.innerText = item[key]
+            }
+            else {
+                let submodel = datamodel[key]
+                console.log(Object.keys(submodel))
+                console.log("submodel = ", submodel)
+                for (const nestedKey of Object.keys(submodel)){
+                    if (submodel[nestedKey] == null) {
+                        // set text inside cell
+                        const x = item[key]
+                        console.log(nestedKey)
+                        col.innerText = x[nestedKey]
+                    }
+                }
+            }
+            // append columns to row
+            tr.appendChild(col)
+        }
+
+    }
+}
+
+
+function getAndCreateAJAXPFPTable(
+    url,
+    datamodel,
+    tableId,
+) {
+    fetch(
+        url, 
+        {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }
+        )
+    .then((response) => response.json())
+    .then((data) => data.results)
+    .then(
+        (data) => {
+            console.log("type of", typeof data)
+            createPFPTable(
+                tableId=tableId,
+                datamodel=datamodel,
+                data=data,
+            )
+        }
+    )
+    .catch(
+        (error) => {
+            console.error('Error:', error);
+        }
+    );
+}
