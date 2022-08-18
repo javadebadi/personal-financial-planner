@@ -156,29 +156,50 @@ function createPFPTable(
     console.log(datamodel)
     const table = document.getElementById(tableId)
     table.innerHTML = ''
+    const thead = document.createElement('thead')
+    table.appendChild(thead)
     const tbody = document.createElement('tbody')
     table.appendChild(tbody)
-    console.log("PFP table", table)
+    // --------------- HEADER ROWS ------------------
+    const th = document.createElement('tr')
+    th.classList.add('table-warning', 'fw-bold')
+    thead.appendChild(th)
+    for (const key of Object.keys(datamodel)) {
+        // create a cell (column) inside the tr row
+        const col = document.createElement('td')
+        if (typeof datamodel[key] == 'string') {
+            // set text inside cell
+            col.innerText = datamodel[key]
+        }
+        else {
+            let submodel = datamodel[key]
+            for (const nestedKey of Object.keys(submodel)){
+                if (typeof submodel[nestedKey] == 'string') {
+                    // set text inside cell
+                    col.innerText = datamodel[key][nestedKey]
+                }
+            }
+        }
+        // append columns to row
+        th.appendChild(col)
+    }
+    // --------------- DATA ROWS ------------------
     for (const item of data) {
         const tr = document.createElement('tr')
         tbody.appendChild(tr)
         for (const key of Object.keys(datamodel)) {
             // create a cell (column) inside the tr row
             const col = document.createElement('td')
-            if (datamodel[key] == null) {
+            if (typeof datamodel[key] == 'string') {
                 // set text inside cell
                 col.innerText = item[key]
             }
             else {
                 let submodel = datamodel[key]
-                console.log(Object.keys(submodel))
-                console.log("submodel = ", submodel)
                 for (const nestedKey of Object.keys(submodel)){
-                    if (submodel[nestedKey] == null) {
+                    if (typeof submodel[nestedKey] == 'string') {
                         // set text inside cell
-                        const x = item[key]
-                        console.log(nestedKey)
-                        col.innerText = x[nestedKey]
+                        col.innerText = item[key][nestedKey]
                     }
                 }
             }
