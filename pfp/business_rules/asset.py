@@ -30,6 +30,19 @@ class AssetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Asset
         fields = "__all__"
+        depth = 0
+
+class AssetListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Asset
+        fields = (
+            'category',
+            'sub_category',
+            'amount',
+            'unit_value',
+            'unit_value_currency_code',
+        )
         depth = 1
 
 
@@ -245,4 +258,24 @@ class AssetBR:
         a.unit_value = unit_value
         a.save()
         return AssetSerializer(a, many=False).data
+
+    def get(
+        self,
+        ):
+        """Returns list of all assets
+        """
+        assets_list = Asset.objects.filter(
+            user=self.user
+            )
+        return AssetListSerializer(assets_list, many=True).data
+
+    def get_queryset(
+        self,
+        ):
+        """Returns queryset of all assets
+        """
+        assets_list_queyrset = Asset.objects.filter(
+            user=self.user
+            )
+        return assets_list_queyrset
         
