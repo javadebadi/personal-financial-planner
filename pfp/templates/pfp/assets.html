@@ -200,7 +200,7 @@
         };
         console.log(data);
 
-        fetch('http://localhost:8000/pfp/api/assets/create/', {
+        fetch(`${API_ENDPOINT}/assets/create/`, {
             method: 'POST', // or 'PUT'
             headers: {
                 'Content-Type': 'application/json',
@@ -220,7 +220,7 @@
     console.log("4")
 
     getAndCreateAJAXPFPTable(
-        url='http://localhost:8000/pfp/api/assets/list/',
+        url=`${API_ENDPOINT}/assets/list/`,
         datamodel={
             "category": {
                 "asset_category_id": null,
