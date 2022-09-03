@@ -1,3 +1,4 @@
+from pfp.views import AssetsListView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from pfp.models import (
@@ -9,6 +10,8 @@ from rest_framework import serializers
 from pfp.business_rules.asset import AssetBR
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.pagination import PageNumberPagination
+from pfp.business_rules.asset import AssetListSerializer
 
 
 
@@ -194,15 +197,47 @@ class AssetSubCategoryDeleteAPIView(APIView):
             status=200,
         )
 
-class AssetsListAPIView(APIView):
+class AssetsCreateAPIView(APIView):
 
-    def get(self, request):
+    def post(self, request):
+        br = AssetBR(user=request.user)
+        record = br.add(
+            sub_category_id=request.data.get('asset_sub_category_id'),
+            amount=request.data.get('amount'),
+            unit_value=request.data.get('unit_value'),
+            unit_value_currency_code=request.data.get('unit_value_currency_code'),
+        )
         return Response(
             data={
-                "result": {
-                    "cash": "IRR 15,876,250",
-                    "gold": "IRR 120,000,000",
-                    "land": "IRR 1,000,000,000",
-                }
+            "result": "OK",
+            "detail": record,
             }
         )
+
+class AssetsListAPIView(APIView):
+
+    PAGE_SIZE = 1000
+
+    def get(self, request):
+        page_size = self.request.query_params.get(
+            'page_size',
+            AssetsListAPIView.PAGE_SIZE,
+            )
+
+        br = AssetBR(user=request.user)
+        assets_list_queryset = br.get_queryset()
+
+        paginator = PageNumberPagination()
+        paginator.page_size = page_size
+        result_page = paginator.paginate_queryset(assets_list_queryset, request)
+        serializer = AssetListSerializer(result_page, many=True)
+        print(paginator.get_paginated_response(serializer.data).data)
+        data = paginator.get_paginated_response(serializer.data).data
+        data.update({"detail": "Get list of assets successfully"})
+
+        return Response(
+            data=data,
+            status=200,
+        )
+
+

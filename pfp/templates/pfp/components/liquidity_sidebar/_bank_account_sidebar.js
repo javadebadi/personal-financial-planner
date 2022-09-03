@@ -55,14 +55,14 @@ function getAccountDetail(bank_account_id) {
         {
             console.log(data);
             s = `
-                <div class="col-12 d-flex justify-content-between">
+                <div class="col-12 d-flex justify-content-between pb-2">
                     <span class="fw-bold">${data['memo']}</span>
                     <span class="fw-bold">${data['currency_code']} ${data['balance']}</span>
                 </div>
-                <div class="col-12">
+                <div class="col-12 pb-2">
                     Card Number: <span class="fw-bold">${data['card_number']}</span>
                 </div>
-                <div class="col-12">
+                <div class="col-12 pb-2">
                     IBAN:<span class="fw-bold">${data.iban ? data.iban : ''}</span>
                 </div>
             `

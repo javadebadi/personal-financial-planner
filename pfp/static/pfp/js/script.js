@@ -1,3 +1,4 @@
+API_ENDPOINT = 'http://localhost:8000/pfp/api'
 // a function to get cookie
 // reference: https://www.w3schools.com/js/js_cookies.asp
 function getCookie(cname) {

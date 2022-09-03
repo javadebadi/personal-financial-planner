@@ -12,7 +12,7 @@
     <div class="card mx-3 my-2 col-12 col-md-12 shadow-lg  bg-body rounded">
         <!-- <img class="card-img-top" src="..." alt="Card image cap"> -->
         <div class="card-body">
-            <h5 class="card-title pb-2 d-flex justify-content-between">
+            <h5 class="card-title pb-2 d-flex justify-content-between fs-6">
                 <span>
                     {{ cateogry.name }}
                     <i class="fa fa-edit px-2 small" style="cursor: pointer; color:#708d81;"></i>
@@ -25,7 +25,7 @@
             <table class="table table-hover table-striped" id="asset-{{cateogry.asset_category_id}}">
                 <tbody>
                     {% for subcategory in cateogry.subcategories %}
-                    <tr id='asset-sub-category-{{subcategory.asset_subcategory_id}}'>
+                    <tr id='asset-sub-category-{{subcategory.asset_subcategory_id}}' class="small">
                         <td>
                             {{ subcategory.name }}
                         </td>
